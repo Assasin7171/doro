@@ -23,7 +23,7 @@ const Tasks = () => {
         <div className={"p-3 flex gap-5 flex-col"}>
             <div className="flex flex-col gap-3">
                 <h3 className={"text-xl text-center font-mono"}>Add task</h3>
-                <div className="flex justify-center items-center gap-2">
+                <div className="flex flex-col sm:flex-row justify-center items-center gap-3">
                     <input type="text" className={"border-1 border-gray-200 text-md rounded-sm px-2 py-1"}/>
                     <button
                         className={"bg-gray-600 px-2 py-1 rounded-md border-1 border-gray-500 hover:bg-gray-700 hover:cursor-pointer hover:border-gray-500 flex justify-center items-center gap-1"}>

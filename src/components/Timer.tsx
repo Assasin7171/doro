@@ -11,7 +11,7 @@ const Timer = () => {
 
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
-    
+
     useEffect(() => {
         if (!isRunning) return;
 
@@ -24,23 +24,34 @@ const Timer = () => {
             setTimeLeft(remaining);
         }, 500);
 
-        return () => clearInterval(interval);
+        return () => {
+            clearInterval(interval);
+        }
     }, [isRunning]);
 
     const handleOnStart = () => {
-        setTimeLeft(defaultTimeLeft);
-        setIsRunning(prevState => !prevState);
+        if (timeLeft >= defaultTimeLeft) {
+            setTimeLeft(defaultTimeLeft);
+        }
+        setIsRunning(true);
+
     }
-    
+
+    const handleTimerReset = () => {
+        setTimeLeft(defaultTimeLeft);
+        setIsRunning(false);
+    }
+
 
     return (
-        <div className="bg-gray-500 flex flex-col items-center justify-center gap-5 p-5 w-150 shadow-lg rounded-sm">
+        <div className="bg-gray-500 flex flex-col items-center justify-center gap-5 px-15 py-5 shadow-lg rounded-sm">
             <div
                 className="w-50 h-50  rounded-full border-4 text-3xl font-mono border-red-500 flex items-center justify-center">
                 {`${minutes}:${seconds.toString().padStart(2, "0")}`}
             </div>
 
-            <div className="text-lg px-4 py-2 border-2 border-gray-600 rounded-md flex gap-2">
+            <div
+                className="text-md sm:text-lg px-4 py-2 border-2 border-gray-600 rounded-md flex flex-col sm:flex-row gap-1">
                 <button
                     className={"bg-gray-600 px-2 py-1 rounded-md border-1 border-gray-500 hover:bg-gray-700 hover:cursor-pointer hover:border-gray-500 flex justify-center items-center gap-2 disabled:bg-gray-400"}
                     onClick={() => handleOnStart()}
@@ -49,12 +60,14 @@ const Timer = () => {
                     Start
                 </button>
                 <button
-                    className={"bg-gray-600 px-2 py-1 rounded-md border-1 border-gray-500 hover:bg-gray-700 hover:cursor-pointer hover:border-gray-500 flex justify-center items-center gap-2"}>
+                    className={"bg-gray-600 px-2 py-1 rounded-md border-1 border-gray-500 hover:bg-gray-700 hover:cursor-pointer hover:border-gray-500 flex justify-center items-center gap-2"}
+                    onClick={() => setIsRunning(false)}>
                     <Pause className={"w-5 h-5"}/>
                     Pause
                 </button>
                 <button
-                    className={"bg-gray-600 px-2 py-1 rounded-md border-1 border-gray-500 hover:bg-gray-700 hover:cursor-pointer hover:border-gray-500 flex justify-center items-center gap-2"}>
+                    className={"bg-gray-600 px-2 py-1 rounded-md border-1 border-gray-500 hover:bg-gray-700 hover:cursor-pointer hover:border-gray-500 flex justify-center items-center gap-2"}
+                    onClick={() => handleTimerReset()}>
                     <RotateCcw className={"w-5 h-5"}/>
                     Reset
                 </button>

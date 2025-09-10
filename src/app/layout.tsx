@@ -30,7 +30,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-600 text-gray-300`}
       >
-      <div className="container flex flex-col mx-auto gap-8">
+      <div className="container flex flex-col sm:px-5 sm:mx-auto gap-8">
           <Navigation/>
 
           {children}
