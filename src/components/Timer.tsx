@@ -60,13 +60,14 @@ const Timer = () => {
                     Start
                 </button>
                 <button
-                    className={"bg-gray-600 px-2 py-1 rounded-md border-1 border-gray-500 hover:bg-gray-700 hover:cursor-pointer hover:border-gray-500 flex justify-center items-center gap-2"}
-                    onClick={() => setIsRunning(false)}>
+                    className={"bg-gray-600 px-2 py-1 rounded-md border-1 border-gray-500 hover:bg-gray-700 hover:cursor-pointer hover:border-gray-500 flex justify-center items-center gap-2 disabled:bg-gray-400"}
+                    onClick={() => setIsRunning(false)}
+                    disabled={!isRunning}>
                     <Pause className={"w-5 h-5"}/>
                     Pause
                 </button>
                 <button
-                    className={"bg-gray-600 px-2 py-1 rounded-md border-1 border-gray-500 hover:bg-gray-700 hover:cursor-pointer hover:border-gray-500 flex justify-center items-center gap-2"}
+                    className={"bg-gray-600 px-2 py-1 rounded-md border-1 border-gray-500 hover:bg-gray-700 hover:cursor-pointer hover:border-gray-500 flex justify-center items-center gap-2 disabled:bg-gray-400"}
                     onClick={() => handleTimerReset()}>
                     <RotateCcw className={"w-5 h-5"}/>
                     Reset
