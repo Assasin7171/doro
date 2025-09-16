@@ -26,10 +26,13 @@ const Tasks = () => {
         setValue("");
     }
 
-    const completeTask = (task: TaskType) => {
-        task.isComplete = true;
-
-        console.log("completed task", task)
+    const completeTask = (id: number) => {
+        setTasks((prev) =>
+            prev.map((t) =>
+                t.id === id ? { ...t, isComplete: !t.isComplete } : t
+            )
+        );
+        console.log("completed task", id)
     }
 
     return (
@@ -53,12 +56,9 @@ const Tasks = () => {
 
             <div className="flex flex-col gap-3">
                 <h4 className={"text-xl text-center font-mono"}>Task list</h4>
-                <div className="flex justify-between text-lg border-b-1">
-                    <span>Title</span>
-                    <span>Is completed</span>
-                </div>
+                
                 {tasks.map((task) => (
-                    <Task key={task.id} completeTask={() => completeTask(task)} task={task}/>
+                    <Task key={task.id} completeTask={completeTask} task={task}/>
                 ))}
             </div>
 
