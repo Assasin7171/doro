@@ -14,6 +14,8 @@ const Timer = () => {
 
     useEffect(() => {
         if (!isRunning) return;
+        
+        const audio = new Audio("/alert_effect.mp3");
 
         const start = Date.now();
         const end = start + timeLeft * 1000;
@@ -22,7 +24,17 @@ const Timer = () => {
             const now = Date.now();
             const remaining = Math.max(0, Math.round((end - now) / 1000));
             setTimeLeft(remaining);
-        }, 500);
+
+            console.log("test " + remaining);
+            if (remaining === 0){
+                
+                setIsRunning(false);
+                
+                audio.play().then(()=> setTimeLeft(defaultTimeLeft));
+            }
+
+        }, 1000);
+        
 
         return () => {
             clearInterval(interval);
