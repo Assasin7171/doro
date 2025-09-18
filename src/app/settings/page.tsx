@@ -14,14 +14,10 @@ const Page = () => {
 
     const handleSetTimer = (timer: number) => {
         setWorkTimer(timer);
-
-
     }
 
     const handleSetBreakTime = (breakTime: number) => {
         setBrakeTimer(breakTime);
-
-
     }
 
     const saveTimers = () => {
