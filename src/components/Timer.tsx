@@ -2,39 +2,42 @@
 
 import {Pause, Play, RotateCcw} from "lucide-react";
 import {useEffect, useState} from "react";
+import {useSettingsStore} from "@/stores/settingsStore";
+
 
 const Timer = () => {
-    const defaultTimeLeft = (25 * 60);
+    const defaultTimeToCount = useSettingsStore((state) => state.defaultTimeToCount);
+    const timeToCountStore = useSettingsStore((state) => state.workTime);
 
-    const [timeLeft, setTimeLeft] = useState<number>(defaultTimeLeft);
+    const [timeToCount, setTimeToCount] = useState<number>(timeToCountStore != 0 ? (timeToCountStore * 60) : (defaultTimeToCount * 60));
     const [isRunning, setIsRunning] = useState<boolean>(false);
 
-    const minutes = Math.floor(timeLeft / 60);
-    const seconds = timeLeft % 60;
+    const minutes = Math.floor(timeToCount / 60);
+    const seconds = timeToCount % 60;
 
     useEffect(() => {
         if (!isRunning) return;
-        
+
         const audio = new Audio("/alert_effect.mp3");
 
         const start = Date.now();
-        const end = start + timeLeft * 1000;
+        const end = start + timeToCount * 1000;
 
         const interval = setInterval(() => {
             const now = Date.now();
             const remaining = Math.max(0, Math.round((end - now) / 1000));
-            setTimeLeft(remaining);
+            setTimeToCount(remaining);
 
             console.log("test " + remaining);
-            if (remaining === 0){
-                
+            if (remaining === 0) {
+
                 setIsRunning(false);
-                
-                audio.play().then(()=> setTimeLeft(defaultTimeLeft));
+
+                audio.play().then(() => setTimeToCount(defaultTimeToCount));
             }
 
         }, 1000);
-        
+
 
         return () => {
             clearInterval(interval);
@@ -42,15 +45,15 @@ const Timer = () => {
     }, [isRunning]);
 
     const handleOnStart = () => {
-        if (timeLeft >= defaultTimeLeft) {
-            setTimeLeft(defaultTimeLeft);
+        if (timeToCount >= defaultTimeToCount) {
+            setTimeToCount(defaultTimeToCount);
         }
         setIsRunning(true);
 
     }
 
     const handleTimerReset = () => {
-        setTimeLeft(defaultTimeLeft);
+        setTimeToCount(defaultTimeToCount);
         setIsRunning(false);
     }
 
