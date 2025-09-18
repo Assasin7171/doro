@@ -4,12 +4,14 @@ import {useSettingsStore} from "@/stores/settingsStore";
 import {useState} from "react";
 
 const Page = () => {
-    const workTime: number = useSettingsStore((state) => state.workTime);
-    const brakeTime: number = useSettingsStore((state) => state.brakeTime);
+    const workTime: number = useSettingsStore((state) => state.workTime / 60);
+    const brakeTime: number = useSettingsStore((state) => state.brakeTime / 60);
+
     const setWorkTime = useSettingsStore((state) => state.setTimeToCount);
     const setBrakeTime = useSettingsStore((state) => state.setBreakTime);
 
     const [workTimer, setWorkTimer] = useState<number>(workTime);
+
     const [brakeTimer, setBrakeTimer] = useState<number>(brakeTime);
 
     const handleSetTimer = (timer: number) => {
@@ -21,9 +23,9 @@ const Page = () => {
     }
 
     const saveTimers = () => {
-        setWorkTime(workTimer);
-        setBrakeTime(brakeTimer);
-        console.log("Save timers");
+        setWorkTime(workTimer * 60);
+        setBrakeTime(brakeTimer * 60);
+        alert("Saved settings");
     };
     return (
         <div className={"mx-auto flex flex-col gap-4"}>

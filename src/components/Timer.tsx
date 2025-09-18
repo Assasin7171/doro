@@ -6,11 +6,11 @@ import {useSettingsStore} from "@/stores/settingsStore";
 
 
 const Timer = () => {
-    const defaultTimeToCount = useSettingsStore((state) => state.defaultTimeToCount);
     const timeToCountStore = useSettingsStore((state) => state.workTime);
 
-    const [timeToCount, setTimeToCount] = useState<number>(timeToCountStore != 0 ? (timeToCountStore * 60) : (defaultTimeToCount * 60));
+    const [timeToCount, setTimeToCount] = useState<number>(timeToCountStore);
     const [isRunning, setIsRunning] = useState<boolean>(false);
+    const [isPauseActive, setIsPauseActive] = useState<boolean>(false);
 
     const minutes = Math.floor(timeToCount / 60);
     const seconds = timeToCount % 60;
@@ -28,12 +28,12 @@ const Timer = () => {
             const remaining = Math.max(0, Math.round((end - now) / 1000));
             setTimeToCount(remaining);
 
-            console.log("test " + remaining);
+            // console.log("test " + remaining);
             if (remaining === 0) {
 
                 setIsRunning(false);
 
-                audio.play().then(() => setTimeToCount(defaultTimeToCount));
+                audio.play().then(() => setTimeToCount(timeToCountStore));
             }
 
         }, 1000);
@@ -45,18 +45,26 @@ const Timer = () => {
     }, [isRunning]);
 
     const handleOnStart = () => {
-        if (timeToCount >= defaultTimeToCount) {
-            setTimeToCount(defaultTimeToCount);
+        if (isPauseActive) {
+            setIsRunning(true);
+            setIsPauseActive(false);
+            return;
         }
-        setIsRunning(true);
-
+        else {
+            setIsRunning(true);
+            return;
+        }
     }
 
     const handleTimerReset = () => {
-        setTimeToCount(defaultTimeToCount);
+        setTimeToCount(timeToCountStore);
         setIsRunning(false);
     }
 
+    const handleTimerPause = () => {
+        setIsPauseActive(true)
+        setIsRunning(false)
+    };
 
     return (
         <div className="bg-gray-500 flex flex-col items-center justify-center gap-5 px-15 py-5 shadow-lg rounded-sm">
@@ -76,7 +84,7 @@ const Timer = () => {
                 </button>
                 <button
                     className={"bg-gray-600 px-2 py-1 rounded-md border-1 border-gray-500 hover:bg-gray-700 hover:cursor-pointer hover:border-gray-500 flex justify-center items-center gap-2 disabled:bg-gray-400"}
-                    onClick={() => setIsRunning(false)}
+                    onClick={() => handleTimerPause()}
                     disabled={!isRunning}>
                     <Pause className={"w-5 h-5"}/>
                     Pause
