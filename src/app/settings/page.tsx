@@ -4,15 +4,16 @@ import {useSettingsStore} from "@/stores/settingsStore";
 import {useState} from "react";
 
 const Page = () => {
-    const workTime: number = useSettingsStore((state) => state.workTime / 60);
-    const brakeTime: number = useSettingsStore((state) => state.brakeTime / 60);
+    const workTime: number = useSettingsStore((state) => state.workTime);
+    const brakeTime: number = useSettingsStore((state) => state.brakeTime);
 
     const setWorkTime = useSettingsStore((state) => state.setTimeToCount);
     const setBrakeTime = useSettingsStore((state) => state.setBreakTime);
 
+    //do obsługi inputów
     const [workTimer, setWorkTimer] = useState<number>(workTime);
-
     const [brakeTimer, setBrakeTimer] = useState<number>(brakeTime);
+
 
     const handleSetTimer = (timer: number) => {
         setWorkTimer(timer);
@@ -23,8 +24,12 @@ const Page = () => {
     }
 
     const saveTimers = () => {
-        setWorkTime(workTimer * 60);
-        setBrakeTime(brakeTimer * 60);
+        setWorkTime(workTimer);
+        setBrakeTime(brakeTimer);
+        
+        localStorage.setItem("workTimer", JSON.stringify(workTimer));
+        localStorage.setItem("brakeTimer", JSON.stringify(brakeTimer));
+
         alert("Saved settings");
     };
     return (

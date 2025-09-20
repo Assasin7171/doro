@@ -8,56 +8,62 @@ import {useSettingsStore} from "@/stores/settingsStore";
 const Timer = () => {
     const timeToCountStore = useSettingsStore((state) => state.workTime);
 
-    const [timeToCount, setTimeToCount] = useState<number>(timeToCountStore);
+    const [timeToCount, setTimeToCount] = useState<number>(timeToCountStore * 60);
     const [isRunning, setIsRunning] = useState<boolean>(false);
     const [isPauseActive, setIsPauseActive] = useState<boolean>(false);
 
     const minutes = Math.floor(timeToCount / 60);
     const seconds = timeToCount % 60;
 
+    const setWorkTime = useSettingsStore((state) => state.setTimeToCount);
+    const setBrakeTime = useSettingsStore((state) => state.setBreakTime);
+
+    useEffect(() => {
+        const workTimerCopy = localStorage.getItem("workTimer");
+        const brakeTimerCopy = localStorage.getItem("brakeTimer");
+        if (workTimerCopy && brakeTimerCopy) {
+            const workTimer = parseInt(workTimerCopy);
+            const brakeTimer = parseInt(brakeTimerCopy);
+
+            setWorkTime(workTimer);
+            setBrakeTime(brakeTimer);
+        }
+    }, []);
+
     useEffect(() => {
         if (!isRunning) return;
 
         const audio = new Audio("/alert_effect.mp3");
-
-        const start = Date.now();
-        const end = start + timeToCount * 1000;
+        const end = Date.now() + timeToCount * 1000;
 
         const interval = setInterval(() => {
-            const now = Date.now();
-            const remaining = Math.max(0, Math.round((end - now) / 1000));
+            const remaining = Math.max(0, Math.round((end - Date.now()) / 1000));
             setTimeToCount(remaining);
 
-            // console.log("test " + remaining);
             if (remaining === 0) {
-
+                clearInterval(interval);
                 setIsRunning(false);
+                audio.play();
 
-                audio.play().then(() => setTimeToCount(timeToCountStore));
             }
-
         }, 1000);
 
-
-        return () => {
-            clearInterval(interval);
-        }
-    }, [isRunning]);
+        return () => clearInterval(interval);
+    }, [isRunning, timeToCount]);
 
     const handleOnStart = () => {
         if (isPauseActive) {
             setIsRunning(true);
             setIsPauseActive(false);
             return;
-        }
-        else {
+        } else {
             setIsRunning(true);
             return;
         }
     }
 
     const handleTimerReset = () => {
-        setTimeToCount(timeToCountStore);
+        setTimeToCount(timeToCountStore * 60);
         setIsRunning(false);
     }
 

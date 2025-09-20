@@ -2,14 +2,17 @@ import {create} from "zustand/react";
 
 
 type SettingsStoreType = {
+    firstRun: boolean,
     workTime: number,
     brakeTime: number,
     setTimeToCount: (timeToCount: number) => void,
     setBreakTime: (timeToCount: number) => void,
 }
+
 const useSettingsStore = create<SettingsStoreType>((set) => ({
-    workTime: 25 * 60,
-    brakeTime: 5 * 60,
+    firstRun: true,
+    workTime: 25,
+    brakeTime: 5,
     setTimeToCount: (setTimeToCount: number) => set({workTime: setTimeToCount}),
     setBreakTime: (setBreakTime: number) => set({brakeTime: setBreakTime}),
 }))

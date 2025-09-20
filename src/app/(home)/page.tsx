@@ -1,6 +1,7 @@
 import Tasks from "@/components/Tasks";
 import Timer from "@/components/Timer";
 
+
 const Home = ()=>  {
     return (
         <main>
